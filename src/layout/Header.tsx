@@ -3,12 +3,29 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AuthContexts } from "../auth/Context/AuthContext";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-
+import { signoutApi } from "../api/auth";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import { Tooltip } from "antd";
 const Header = () => {
-  const { user } = useContext(AuthContexts);
+  const { user, setUser } = useContext(AuthContexts);
+  const handleLogout = async () => {
+    try {
+      const res: any = await signoutApi();
+      if (res.status === 200) {
+        setUser(null);
+        Cookies.remove("token");
+        toast.success("Logout Success", {
+          autoClose: 1000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="header w-full ">
-      <div className="header-box flex justify-between items-center">
+      <div className="header-box flex justify-between items-center ">
         <div className="text-left">
           <h2 className="text-xl font-semibold">Hello</h2>
           <span className="text-sm text-[#757575]">Have a nice day</span>
@@ -27,9 +44,29 @@ const Header = () => {
               />
             </div>
             {user?.name ? (
-              <div className="name">
-                <span className="font-semibold">{user?.name}</span>
-              </div>
+              <Tooltip
+                trigger={["click"]}
+                placement="bottom"
+                color="white"
+                title={
+                  <>
+                    <div className="logout">
+                      <button
+                        onClick={handleLogout}
+                        className="bg-blue-500 text-white font-semibold px-6 py-1 shadow-lg rounded-md "
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </>
+                }
+              >
+                <div className="cursor-pointer">
+                  <div className="name flex flex-col">
+                    <span className="font-semibold">{user?.name}</span>
+                  </div>
+                </div>
+              </Tooltip>
             ) : (
               <Link to={"/signin"}>
                 <div className="btn-login">

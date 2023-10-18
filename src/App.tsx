@@ -7,6 +7,7 @@ import Signin from "./auth/Signin";
 import { AuthContexts } from "./auth/Context/AuthContext";
 import { useContext } from "react";
 import "react-toastify/dist/ReactToastify.css";
+import Checkin from "./pages/Checkin";
 
 function App() {
   const { user } = useContext(AuthContexts);
@@ -14,17 +15,21 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LayoutAdmin />}>
-            <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/"
+            element={user ? <LayoutAdmin /> : <Navigate to={"/signup"} />}
+          >
+            <Route index path="/dashboard" element={<Dashboard />} />
             <Route path="/customer" element={<Customer />} />
+            <Route path="/checkin" element={<Checkin />} />
           </Route>
           <Route
             path="/signup"
-            element={!user ? <Signup /> : <Navigate to={"/"} />}
+            element={!user ? <Signup /> : <Navigate to={"/dashboard"} />}
           />
           <Route
             path="/signin"
-            element={!user ? <Signin /> : <Navigate to={"/"} />}
+            element={!user ? <Signin /> : <Navigate to={"/dashboard"} />}
           />
         </Routes>
       </BrowserRouter>

@@ -25,7 +25,7 @@ const Signin = () => {
         Cookies.set("token", data.data.token, { expires: 7 });
         setUser(data?.data?.user);
         setTimeout(() => {
-          navigate("/");
+          navigate("/dashboard");
         }, 1000);
         // Chuyển hướng sau đăng nhập thành công
       } else {

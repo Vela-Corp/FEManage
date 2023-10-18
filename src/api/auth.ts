@@ -34,4 +34,35 @@ const getOneUser = async (token?: string) => {
     console.log(error);
   }
 };
-export { sigupApi, signinApi, signoutApi, getOneUser };
+
+const getUserById = async (id: string) => {
+  try {
+    const res = await service.get(`/user/${id}`);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getAllUsers = async ({ keyword, page, sort }: any) => {
+  try {
+    const response = await service.get("/users", {
+      params: {
+        keyword: keyword,
+        page: page,
+        sort: sort,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export {
+  sigupApi,
+  signinApi,
+  signoutApi,
+  getOneUser,
+  getUserById,
+  getAllUsers,
+};

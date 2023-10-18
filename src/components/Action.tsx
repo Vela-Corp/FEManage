@@ -18,10 +18,10 @@ const Action = ({
       <div className="action">
         {/* add */}
 
-        <div className="action-box flex items-center  gap-7 w-full">
+        <div className="action-box flex items-center justify-between w-full">
           <form
             onSubmit={handSubmitSearch}
-            className="inp-search flex gap-4 items-center w-[60%] bg-white rounded-2xl py-3 px-5"
+            className="inp-search flex gap-4 items-center w-[50%] bg-white rounded-xl py-3 px-5"
           >
             <i className="text-base">
               <FontAwesomeIcon icon={faSearch} />
@@ -34,14 +34,20 @@ const Action = ({
               placeholder="Search"
             />
           </form>
-          <div className="btn-add">
-            <button
-              onClick={prop?.handAdd}
-              className="btn btn-primary font-semibold text-white bg-blue-500 rounded-md py-2 px-5"
-            >
-              Add <FontAwesomeIcon className="text-white" icon={faPlus} />
-            </button>
-          </div>
+          {prop?.handAdd && (
+            <div className="btn-add">
+              <button
+                onClick={prop?.handAdd}
+                className="btn btn-primary font-bold text-white bg-blue-500 rounded-md py-2 px-8 hover:bg-blue-600"
+              >
+                Add{" "}
+                <FontAwesomeIcon
+                  className="text-white font-bold text-lg"
+                  icon={faPlus}
+                />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -1,8 +1,14 @@
 import service from "./config";
 
-const getAllEvents = async () => {
+const getAllEvents = async ({ page, sort, keyword }: any) => {
   try {
-    const response = await service.get("/events");
+    const response = await service.get("/events", {
+      params: {
+        page: page,
+        sort: sort,
+        keyword: keyword,
+      },
+    });
     return response.data;
   } catch (error) {
     console.log(error);

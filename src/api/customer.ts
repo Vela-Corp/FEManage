@@ -4,12 +4,10 @@ const getAllCustomers = async ({ keyword, page, sort }: any) => {
     const response = await service.get("/customers", {
       params: {
         keyword: keyword,
-        page: page,
+        page: page || "all",
         sort: sort,
       },
     });
-    console.log(response);
-
     return response.data;
   } catch (error) {
     console.log(error);
@@ -19,7 +17,6 @@ const getAllCustomers = async ({ keyword, page, sort }: any) => {
 const createCustomer = async (customer: any) => {
   try {
     const response = await service.post("/customers", customer);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log(error);

@@ -19,7 +19,7 @@ const Sliderbar = () => {
       title: "Customers",
     },
     {
-      path: "/",
+      path: "/checkin",
       icon: <FontAwesomeIcon icon={faFolderOpen} />,
       title: "Checkin",
     },
