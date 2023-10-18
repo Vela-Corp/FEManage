@@ -8,6 +8,8 @@ const getAllCustomers = async ({ keyword, page, sort }: any) => {
         sort: sort,
       },
     });
+    console.log(response.data);
+
     return response.data;
   } catch (error) {
     console.log(error);

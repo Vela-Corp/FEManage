@@ -1,4 +1,8 @@
-import { faCircleCheck, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleCheck,
+  faPlus,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Action from "../components/Action";
 import { useContext, useState } from "react";
@@ -8,12 +12,21 @@ import { deleteEvent, getAllEvents } from "../api/event";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { useMutation } from "react-query";
-import { Modal } from "antd";
+import { Modal, Table } from "antd";
 import { createCheck } from "../api/check";
 import { AuthContexts } from "../auth/Context/AuthContext";
 import { toast } from "react-toastify";
 import { getAllCustomers } from "../api/customer";
 import Paginations from "../components/Pagination";
+import type { ColumnsType } from "antd/es/table";
+interface DataType {
+  key: React.Key;
+  name: string;
+  created_by: string;
+  updated_by: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const Dashboard = () => {
   const { user } = useContext(AuthContexts);
@@ -91,6 +104,74 @@ const Dashboard = () => {
     };
     mutateCheckIn(newData);
   };
+
+  const columns: ColumnsType<DataType> = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      sorter: {
+        compare: (a, b) => a.name.localeCompare(b.name),
+        multiple: 4,
+      },
+    },
+
+    {
+      title: "Created By",
+      dataIndex: "created_by",
+    },
+    {
+      title: "Updated By",
+      dataIndex: "updated_by",
+    },
+    {
+      title: "Created At",
+      dataIndex: "createdAt",
+      render: (text) => (
+        <span>
+          {format(new Date(text), "dd/MM/yyyy", {
+            locale: vi,
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Updated At",
+      dataIndex: "updatedAt",
+      render: (text) => (
+        <span>
+          {format(new Date(text), "dd/MM/yyyy", {
+            locale: vi,
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Actions",
+      dataIndex: "action",
+      render: (_, record: any) => (
+        <div className="flex items-center  gap-4 ">
+          <button
+            onClick={() => {
+              setIdEvent(record?._id);
+              setModalCheckin(true);
+            }}
+            className=" text-green-500 text-xl hover:text-green-600"
+          >
+            <FontAwesomeIcon icon={faCircleCheck} />
+          </button>
+          <button
+            onClick={() => {
+              setIdEvent(record?._id);
+              setModalDelete(true);
+            }}
+            className=" text-red-500 text-xl hover:text-red-600"
+          >
+            <FontAwesomeIcon icon={faTrashCan} />
+          </button>
+        </div>
+      ),
+    },
+  ];
   return (
     <>
       <div className="checkin">
@@ -108,7 +189,7 @@ const Dashboard = () => {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="222-333-4444"
-                className="w-full h-8 outline-none border-2 border-black focus:border-black-500 rounded-md pl-1 mt-1"
+                className="w-full h-8 outline-none border border-gray-400 focus:border-black rounded-md pl-1 mt-1"
                 type="text"
                 name=""
                 id=""
@@ -135,79 +216,28 @@ const Dashboard = () => {
       <div className="modelAdd">
         <AddEvent open={openAdd} handClose={handClose} />
       </div>
-      <div className="action mt-10">
+      <div className="action mt-5">
         <Action
           valueSearch={valueSearch}
           setValueSearch={setValueSearch}
           handSubmitSearch={handSubmitSearch}
-          handAdd={handAdd}
         />
       </div>
-      <div className="table w-full bg-white rounded-2xl overflow-hidden my-9 ">
-        <div className="flex justify-between items-center">
-          <h1 className="font-semibold text-xl p-5">List Events</h1>
+      <div className="table w-full bg-white rounded-2xl overflow-hidden my-5 shadow-xl">
+        <div className="flex justify-between items-center p-5">
+          <h1 className="font-semibold text-xl ">List Events</h1>
+          <button
+            onClick={handAdd}
+            className="btn btn-primary font-semibold text-white 0 rounded-md py-1 px-4 bg-teal-500 hover:bg-teal-600"
+          >
+            Add{" "}
+            <FontAwesomeIcon
+              className="text-white font-bold text-lg"
+              icon={faPlus}
+            />
+          </button>
         </div>
-        <table className="w-full">
-          <thead>
-            <tr className="bg-[#EFF4FA] h-16 ">
-              <th>STT</th>
-              <th>Name</th>
-              <th>Created By</th>
-              <th>Updated By</th>
-              <th>Created At</th>
-              <th>Updated At</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody className="text-center">
-            {data && data?.docs.length > 0
-              ? data?.docs?.map((item: any, index: number) => (
-                  <tr
-                    className={`${index % 2 == 0 ? "bg-white" : "bg-gray-100"}`}
-                    key={index}
-                  >
-                    <td>{index + 1}</td>
-                    <td className=" max-w-[120px] font-bold truncate">
-                      {item?.name}
-                    </td>
-                    <td>{item?.created_by}</td>
-                    <td>{item?.updated_by}</td>
-                    <td>
-                      {format(new Date(item?.createdAt), "dd/MM/yyyy", {
-                        locale: vi,
-                      })}
-                    </td>
-                    <td>
-                      {format(new Date(item?.updatedAt), "dd/MM/yyyy", {
-                        locale: vi,
-                      })}
-                    </td>
-                    <td className="flex items-center justify-center gap-4 h-20">
-                      <button
-                        onClick={() => {
-                          setModalCheckin(true);
-                          setIdEvent(item?._id);
-                        }}
-                        className="text-green-500 text-2xl hover:text-green-700"
-                      >
-                        <FontAwesomeIcon icon={faCircleCheck} />
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          setIdEvent(item?._id);
-                          setModalDelete(true);
-                        }}
-                        className=" text-red-500 text-xl hover:text-red-600"
-                      >
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              : null}
-          </tbody>
-        </table>
+        <Table columns={columns} dataSource={data?.docs} pagination={false} />
         {data?.total > 10 && (
           <div className="pagination text-center my-5 py-2 bg-white">
             <Paginations

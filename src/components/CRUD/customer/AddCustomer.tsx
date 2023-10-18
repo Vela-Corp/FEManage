@@ -98,7 +98,7 @@ const AddCustomer = ({ open, handClose }: any) => {
         <form>
           <div className="title">
             <h2 className="text-xl font-semibold">Update</h2>
-            <div className="box flex justify-center gap-2 w-full border-2 border-black rounded-lg p-3 mt-2">
+            <div className="box flex justify-center gap-2 w-full  rounded-lg  mt-2">
               <div className="left w-full">
                 <div className="name w-full">
                   <label htmlFor="">Name</label> <br />
@@ -110,7 +110,7 @@ const AddCustomer = ({ open, handClose }: any) => {
                     name="name"
                     id=""
                     placeholder={user?.name}
-                    className="w-full h-8 outline-none border-2 border-black focus:border-black-500 rounded-md pl-1"
+                    className="w-full h-8 outline-none border border-slate-400 focus:border-gray-700 rounded-md pl-1"
                   />
                 </div>
                 {errors.name && (
@@ -128,7 +128,7 @@ const AddCustomer = ({ open, handClose }: any) => {
                     name="phone"
                     id=""
                     placeholder={user?.phone}
-                    className="w-full h-8 outline-none border-2 border-black focus:border-black-500 rounded-md pl-1"
+                    className="w-full h-8 outline-none border border-slate-400 focus:border-slate-700 rounded-md pl-1"
                   />
                 </div>
                 {errors.phone && (
@@ -136,9 +136,8 @@ const AddCustomer = ({ open, handClose }: any) => {
                 )}
               </div>
             </div>
-            <div className="h-[1px] bg-black w-full mt-4"></div>
 
-            <h3 className="mt-2 font-medium">Address</h3>
+            <h3 className="mt-2 ">Address</h3>
             <div className="address">
               <textarea
                 {...register("address", {
@@ -147,16 +146,16 @@ const AddCustomer = ({ open, handClose }: any) => {
                 name="address"
                 id=""
                 placeholder="Tầng 5, Toà nhà Viglacera, số 1 Đại lộ Thăng Long, Nam Từ Liêm, Hà Nội."
-                className="w-full h-8 outline-none border-2 border-black focus:border-black-500 rounded-md pl-1 min-h-[100px] max-h-[200px]"
+                className="w-full h-8 outline-none border border-slate-400 focus:border-slate-700 rounded-md pl-1 min-h-[100px] max-h-[200px]"
               ></textarea>
             </div>
             {errors.address && (
               <span className="text-red-500">{errors.address.message}</span>
             )}
 
-            <div className="h-[1px] bg-black w-full mt-4"></div>
+            <div className="h-[1px] bg-gray-500 w-full mt-4"></div>
 
-            <h3 className="mt-2 font-medium">Note</h3>
+            <h3 className="mt-2 ">Note</h3>
             <div className="note">
               <textarea
                 {...register("note", {
@@ -164,7 +163,7 @@ const AddCustomer = ({ open, handClose }: any) => {
                 })}
                 name="note"
                 id=""
-                className="w-full h-8 outline-none border-2 border-black focus:border-black-500 rounded-md pl-1 min-h-[100px] max-h-[200px]"
+                className="w-full h-8 outline-none border border-slate-400 focus:border-slate-700 rounded-md pl-1 min-h-[100px] max-h-[200px]"
               ></textarea>
             </div>
             {errors.note && (

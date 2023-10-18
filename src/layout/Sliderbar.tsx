@@ -1,12 +1,13 @@
 import {
-  faFolderOpen,
+  faCheckToSlot,
   faHouse,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 const Sliderbar = () => {
+  const navigate = useNavigate();
   const menuSileBar = [
     {
       path: "/dashboard",
@@ -20,32 +21,38 @@ const Sliderbar = () => {
     },
     {
       path: "/checkin",
-      icon: <FontAwesomeIcon icon={faFolderOpen} />,
+      icon: <FontAwesomeIcon icon={faCheckToSlot} />,
       title: "Checkin",
     },
   ];
+  const [selectedValue, setSelectedValue] = useState(menuSileBar[0].path);
+  const handleSelectChange = (value: string) => {
+    setSelectedValue(value);
+    navigate(value);
+  };
   return (
     <div className="siler__bar  ">
-      <div className="siler__bar__logo text-center">
+      <div className="siler__bar__logo ">
         <Link to={"/"}>
           {" "}
           {/* <h1 className="text-[32px] font-bold">SHOP.CO</h1> */}
         </Link>
       </div>
       <div className="siler__bar__menu">
-        <ul className="menu">
+        <ul className="menu px-1 flex flex-col gap-1">
           {menuSileBar.map((item, index) => (
-            <Link key={index} to={item?.path}>
-              <li
-                key={index}
-                className="pl-8 py-4 pr-20 hover:bg-slate-100 cursor-pointer rounded-lg text-[#757575] "
-              >
-                <div className="flex items-center gap-4">
-                  <div className="icon text-2xl">{item.icon}</div>
-                  <div className="title font-semibold ">{item.title}</div>
-                </div>
-              </li>
-            </Link>
+            <li
+              onClick={() => handleSelectChange(item?.path)}
+              key={index}
+              className={`pl-5 py-2 pr-20 hover:bg-gray-100 cursor-pointer text-black rounded-lg ${
+                selectedValue === item?.path ? "bg-gray-200" : ""
+              }`}
+            >
+              <div className="flex items-center gap-4 ">
+                <div className="icon text-xl  text-teal-400">{item.icon}</div>
+                <div className="title font-normal ">{item.title}</div>
+              </div>
+            </li>
           ))}
         </ul>
       </div>

@@ -1,29 +1,23 @@
-import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 type Props = {
   valueSearch: string;
   setValueSearch: React.Dispatch<React.SetStateAction<string>>;
-  handAdd: any;
   handSubmitSearch: (e: React.FormEvent<HTMLFormElement>) => void;
 };
-const Action = ({
-  valueSearch,
-  setValueSearch,
-  handSubmitSearch,
-  ...prop
-}: Props) => {
+const Action = ({ valueSearch, setValueSearch, handSubmitSearch }: Props) => {
   return (
     <>
       <div className="action">
         {/* add */}
 
-        <div className="action-box flex items-center justify-between w-full">
+        <div className="action-box flex flex-col justify-between w-full">
           <form
             onSubmit={handSubmitSearch}
-            className="inp-search flex gap-4 items-center w-[50%] bg-white rounded-xl py-3 px-5"
+            className="inp-search flex gap-4 items-center w-[30%] bg-white border rounded-lg py-2  px-5"
           >
-            <i className="text-base">
+            <i className="text-base text-teal-400">
               <FontAwesomeIcon icon={faSearch} />
             </i>
             <input
@@ -34,20 +28,6 @@ const Action = ({
               placeholder="Search"
             />
           </form>
-          {prop?.handAdd && (
-            <div className="btn-add">
-              <button
-                onClick={prop?.handAdd}
-                className="btn btn-primary font-bold text-white bg-blue-500 rounded-md py-2 px-8 hover:bg-blue-600"
-              >
-                Add{" "}
-                <FontAwesomeIcon
-                  className="text-white font-bold text-lg"
-                  icon={faPlus}
-                />
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </>

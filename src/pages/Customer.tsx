@@ -1,4 +1,4 @@
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddCustomer from "../components/CRUD/customer/AddCustomer";
 import { deleteCustomer, getAllCustomers } from "../api/customer";
@@ -8,8 +8,20 @@ import { vi } from "date-fns/locale";
 import Paginations from "../components/Pagination";
 import { useState } from "react";
 import Action from "../components/Action";
-import { Modal, Select } from "antd";
+import { Modal, Table } from "antd";
 import { toast } from "react-toastify";
+import type { ColumnsType } from "antd/es/table";
+interface DataType {
+  key: React.Key;
+  name: string;
+  phone: string;
+  address: string;
+  note: string;
+  created_by: string;
+  updated_by: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const Customer = () => {
   const [modalDelete, setModalDelete] = useState(false);
@@ -17,12 +29,13 @@ const Customer = () => {
   const [idCustomer, setIdCustomer] = useState(null as string | null); // id Customer
   const [page, setPage] = useState(1);
   const [valueSearch, setValueSearch] = useState("");
-  const [selectedValue, setSelectedValue] = useState(
-    (null as string | null) || localStorage.getItem("sort")
+  // const [selectedValue, setSelectedValue] = useState(
+  //   (null as string | null) || localStorage.getItem("sort")
+  // );
+  const { data, refetch } = useQuery(["customers", page], () =>
+    getAllCustomers({ page: page, keyword: valueSearch })
   );
-  const { data, refetch } = useQuery(["customers", page, selectedValue], () =>
-    getAllCustomers({ page: page, keyword: valueSearch, sort: selectedValue })
-  );
+  console.log(data?.limit);
 
   const { mutate } = useMutation("deleteCustomer", deleteCustomer, {
     onSuccess: () => {
@@ -41,10 +54,10 @@ const Customer = () => {
     refetch({ queryKey: valueSearch });
   };
 
-  const handleSelectChange = (value: string) => {
-    setSelectedValue(value);
-    localStorage.setItem("sort", value);
-  };
+  // const handleSelectChange = (value: string) => {
+  //   setSelectedValue(value);
+  //   localStorage.setItem("sort", value);
+  // };
 
   const handlDeleteCustomer = (id: string) => {
     mutate(id);
@@ -53,6 +66,85 @@ const Customer = () => {
 
   const handOpenModalAdd = () => setModalAdd(true);
   const handCloseModalAdd = () => setModalAdd(false);
+
+  const columns: ColumnsType<DataType> = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      sorter: {
+        compare: (a, b) => a.name.localeCompare(b.name),
+        multiple: 4,
+      },
+    },
+    {
+      title: "Phone",
+      dataIndex: "phone",
+      sorter: {
+        compare: (a, b) => a.phone.localeCompare(b.phone),
+        multiple: 3,
+      },
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+      sorter: {
+        compare: (a, b) => a.address.localeCompare(b.address),
+        multiple: 2,
+      },
+    },
+    {
+      title: "Note",
+      dataIndex: "note",
+    },
+    {
+      title: "Created By",
+      dataIndex: "created_by",
+    },
+    {
+      title: "Updated By",
+      dataIndex: "updated_by",
+    },
+    {
+      title: "Created At",
+      dataIndex: "createdAt",
+      render: (text) => (
+        <span>
+          {format(new Date(text), "dd/MM/yyyy", {
+            locale: vi,
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Updated At",
+      dataIndex: "updatedAt",
+      render: (text) => (
+        <span>
+          {format(new Date(text), "dd/MM/yyyy", {
+            locale: vi,
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Actions",
+      dataIndex: "action",
+      render: (_, record: any) => (
+        <div className="flex items-center justify-center gap-4 ">
+          <button
+            onClick={() => {
+              setIdCustomer(record?._id);
+              setModalDelete(true);
+            }}
+            className=" text-red-500 text-xl hover:text-red-600"
+          >
+            <FontAwesomeIcon icon={faTrashCan} />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <>
       <Modal
@@ -69,17 +161,16 @@ const Customer = () => {
           <p className="text-base">Do you want to delete this event?</p>
         </div>
       </Modal>
-      <div className="action mt-10 w-full flex items-center justify-between">
+      <div className="action mt-5 w-full flex items-center justify-between">
         <div className="w-full">
           <Action
             valueSearch={valueSearch}
             setValueSearch={setValueSearch}
             handSubmitSearch={handSubmitSearch}
-            handAdd={handOpenModalAdd}
           />
         </div>
       </div>
-      <div className="mt-5">
+      {/* <div className="mt-5">
         <Select
           value={selectedValue}
           onChange={handleSelectChange}
@@ -89,78 +180,38 @@ const Customer = () => {
           <Select.Option value="name">Name</Select.Option>
           <Select.Option value="phone">Phone</Select.Option>
         </Select>
-      </div>
-      <div className="table w-full bg-white rounded-2xl overflow-hidden my-9  ">
+      </div> */}
+      <div className="table w-full bg-white rounded-2xl overflow-hidden my-5  shadow-xl">
         <div className="flex justify-between items-center">
           <h1 className="font-semibold text-xl p-5">List Customrs</h1>
-          <AddCustomer open={modalAdd} handClose={handCloseModalAdd} />
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handOpenModalAdd}
+              className="btn btn-primary font-semibold text-white 0 rounded-md py-1 px-4 bg-teal-500 hover:bg-teal-600"
+            >
+              Add{" "}
+              <FontAwesomeIcon
+                className="text-white font-bold text-lg"
+                icon={faPlus}
+              />
+            </button>
+
+            <AddCustomer open={modalAdd} handClose={handCloseModalAdd} />
+          </div>
         </div>
-        <div className="w-full overflow-x-auto">
-          <table className="w-full overflow-x-auto table-auto ">
-            <thead>
-              <tr className="bg-[#EFF4FA] h-16">
-                <th>STT</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Note</th>
-                <th>Created By</th>
-                <th>Updated By</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody className="text-center">
-              {data && data.docs.length > 0
-                ? data.docs.map((item: any, index: number) => (
-                    <tr
-                      className={`${
-                        index % 2 == 0 ? "bg-white" : "bg-gray-100"
-                      }`}
-                      key={index}
-                    >
-                      <td>{index + 1}</td>
-                      <td className=" max-w-[120px] font-bold truncate">
-                        {item?.name}
-                      </td>
-                      <td className="">{item?.phone}</td>
-                      <td>{item?.address}</td>
-                      <td>{item?.note}</td>
-                      <td>{item?.created_by}</td>
-                      <td>{item?.updated_by}</td>
-                      <td>
-                        {format(new Date(item?.createdAt), "dd/MM/yyyy", {
-                          locale: vi,
-                        })}
-                      </td>
-                      <td>
-                        {format(new Date(item?.updatedAt), "dd/MM/yyyy", {
-                          locale: vi,
-                        })}
-                      </td>
-                      <td className="flex items-center justify-center gap-4 h-20">
-                        <button
-                          onClick={() => {
-                            setIdCustomer(item?._id);
-                            setModalDelete(true);
-                          }}
-                          className=" text-red-500 text-xl hover:text-red-600"
-                        >
-                          <FontAwesomeIcon icon={faTrashCan} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                : null}
-            </tbody>
-          </table>
+        <div className="">
+          <Table
+            columns={columns}
+            dataSource={data?.docs}
+            pagination={false}
+            scroll={{ x: 160 }}
+          />
         </div>
-        {data?.total > 10 && (
+        {data?.total > 5 && (
           <div className="pagination text-center my-5 py-2 bg-white">
             <Paginations
               total={data?.total}
-              limit={data?.limit || 10}
+              limit={data?.limit || 5}
               page={page}
               handlOnChange={handlOnChange}
             />

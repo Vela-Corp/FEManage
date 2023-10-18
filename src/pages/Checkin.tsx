@@ -9,10 +9,19 @@ import { deleteCheck, getAllChecks } from "../api/check";
 import { getAllCustomers } from "../api/customer";
 import { getAllEvents } from "../api/event";
 import { getAllUsers } from "../api/auth";
-import { Modal, Select } from "antd";
+import { Modal, Table } from "antd";
 import Action from "../components/Action";
 import { toast } from "react-toastify";
-
+import type { ColumnsType } from "antd/es/table";
+interface DataType {
+  key: React.Key;
+  name: string;
+  customer_id: string;
+  checked_at: string;
+  checked_by: string;
+  createdAt: string;
+  updatedAt: string;
+}
 const Checkin = () => {
   const [modalDelete, setModalDelete] = useState(false);
   const [idCheckin, setIdCheckin] = useState(null as string | null); // id Customer
@@ -24,12 +33,12 @@ const Checkin = () => {
   const { data: dataEvent } = useQuery("event", getAllEvents);
 
   const { data, refetch } = useQuery(["checkin", page], () =>
-    getAllChecks({ page: page, keyword: valueSearch, sort: selectedValue })
+    getAllChecks({ page: page, keyword: valueSearch })
   );
 
-  const [selectedValue, setSelectedValue] = useState(
-    (null as string | null) || localStorage.getItem("sortCheckin")
-  );
+  //   const [selectedValue, setSelectedValue] = useState(
+  //     (null as string | null) || localStorage.getItem("sortCheckin")
+  //   );
 
   const { mutate } = useMutation("deleteCheckin", deleteCheck, {
     onSuccess: () => {
@@ -47,15 +56,104 @@ const Checkin = () => {
     refetch({ queryKey: valueSearch });
   };
 
-  const handleSelectChange = (value: string) => {
-    setSelectedValue(value);
-    localStorage.setItem("sortCheckin", value);
-  };
+  //   const handleSelectChange = (value: string) => {
+  //     setSelectedValue(value);
+  //     localStorage.setItem("sortCheckin", value);
+  //   };
 
   const handlDeleteCheckin = (id: string) => {
     mutate(id);
     setModalDelete(false);
   };
+
+  const columns: ColumnsType<DataType> = [
+    {
+      title: "Name Event",
+      dataIndex: "event_id",
+      sorter: {
+        compare: (a, b) => a.name.localeCompare(b.name),
+        multiple: 4,
+      },
+      render: (text) => {
+        const event = dataEvent?.docs.find((item: any) => item._id === text);
+        return <span>{event?.name}</span>;
+      },
+    },
+    {
+      title: "Customer",
+      dataIndex: "customer_id",
+      sorter: {
+        compare: (a, b) => a.customer_id.localeCompare(b.customer_id),
+        multiple: 3,
+      },
+      render: (text) => {
+        const customer = dataCustomer?.find((item: any) => item._id === text);
+        return <span>{customer?.name}</span>;
+      },
+    },
+    {
+      title: "Checked at",
+      dataIndex: "checked_at",
+      sorter: {
+        compare: (a, b) => a.checked_at.localeCompare(b.checked_at),
+        multiple: 2,
+      },
+      render: (text) => (
+        <span>
+          {format(new Date(text), "dd/MM/yyyy", {
+            locale: vi,
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Checked by",
+      dataIndex: "checked_by",
+      render: (text) => {
+        const user = dataUsers?.docs.find((item: any) => item._id === text);
+        return <span>{user?.name}</span>;
+      },
+    },
+    {
+      title: "Created At",
+      dataIndex: "createdAt",
+      render: (text) => (
+        <span>
+          {format(new Date(text), "dd/MM/yyyy", {
+            locale: vi,
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Updated At",
+      dataIndex: "updatedAt",
+      render: (text) => (
+        <span>
+          {format(new Date(text), "dd/MM/yyyy", {
+            locale: vi,
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Actions",
+      dataIndex: "action",
+      render: (_, record: any) => (
+        <div className="flex items-center justify-center gap-4 h-20">
+          <button
+            onClick={() => {
+              setIdCheckin(record?._id);
+              setModalDelete(true);
+            }}
+            className=" text-red-500 text-xl hover:text-red-600"
+          >
+            <FontAwesomeIcon icon={faTrashCan} />
+          </button>
+        </div>
+      ),
+    },
+  ];
   return (
     <>
       <Modal
@@ -72,17 +170,16 @@ const Checkin = () => {
           <p className="text-base">Do you want to delete this event?</p>
         </div>
       </Modal>
-      <div className="action mt-10 w-full flex justify-between">
+      <div className="action mt-5 w-full flex justify-between">
         <div className="w-full">
           <Action
             valueSearch={valueSearch}
             setValueSearch={setValueSearch}
             handSubmitSearch={handSubmitSearch}
-            handAdd={null}
           />
         </div>
       </div>
-      <div className="mt-5">
+      {/* <div className="mt-5">
         <Select
           value={selectedValue}
           onChange={handleSelectChange}
@@ -91,81 +188,14 @@ const Checkin = () => {
         >
           <Select.Option value="phone">Phone</Select.Option>
         </Select>
-      </div>
-      <div className="table w-full bg-white rounded-2xl overflow-hidden my-9 ">
+      </div> */}
+      <div className="table w-full bg-white rounded-2xl overflow-hidden my-5 shadow-xl">
         <div className="flex justify-between items-center">
           <h1 className="font-semibold text-xl p-5">List Checkin</h1>
         </div>
-        <table className="w-full">
-          <thead>
-            <tr className="bg-[#EFF4FA] h-16 ">
-              <th>STT</th>
-              <th>Name Event</th>
-              <th>Customer</th>
-              <th>Checked at</th>
-              <th>Checked by</th>
-              <th>Created at</th>
-              <th>Updated at</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody className="text-center">
-            {data && data.docs.length > 0
-              ? data.docs.map((item: any, index: number) => (
-                  <tr
-                    className={`${index % 2 == 0 ? "bg-white" : "bg-gray-100"}`}
-                    key={index}
-                  >
-                    <td>{index + 1}</td>
-                    <td className="max-w-[120px] font-bold truncat">
-                      {dataEvent?.docs?.map((event: any) => {
-                        if (event._id === item?.event_id) {
-                          return event.name;
-                        }
-                      })}
-                    </td>
-                    <td className="">
-                      {" "}
-                      {dataCustomer?.map((cus: any) => {
-                        if (cus._id === item?.customer_id) {
-                          return cus.name;
-                        }
-                      })}
-                    </td>
-                    <td>{item?.checked_at}</td>
-                    <td>
-                      {dataUsers?.docs?.map((user: any) => {
-                        if (user._id === item?.checked_by) {
-                          return user.name;
-                        }
-                      })}
-                    </td>
-                    <td>
-                      {format(new Date(item?.createdAt), "dd/MM/yyyy HH:mm", {
-                        locale: vi,
-                      })}
-                    </td>
-                    <td>
-                      {format(new Date(item?.updatedAt), "dd/MM/yyyy HH:mm", {
-                        locale: vi,
-                      })}
-                    </td>
-                    <td className="flex items-center justify-center gap-4 h-20">
-                      <button
-                        onClick={() => {
-                          setIdCheckin(item?._id);
-                          setModalDelete(true);
-                        }}
-                        className=" text-red-500 text-xl hover:text-red-600"
-                      >
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              : null}
-          </tbody>
-        </table>
+        <div className="w-full overflow-x-auto">
+          <Table columns={columns} dataSource={data?.docs} pagination={false} />
+        </div>
         {data?.total > 10 && (
           <div className="pagination text-center my-5 py-2 bg-white">
             <Paginations

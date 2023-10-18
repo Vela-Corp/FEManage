@@ -35,11 +35,12 @@ const AddEvent = ({ open, handClose }: any) => {
       onOk={handleSubmit(onSubmit)}
       onCancel={handClose}
       okButtonProps={{ style: { backgroundColor: "blue" } }}
+      style={{ top: "30%" }}
     >
       <form>
         <div className="title">
           <h2 className="text-xl font-semibold">Add Event</h2>
-          <div className="box flex justify-center gap-2 w-full border-2 border-black rounded-lg p-3 mt-2">
+          <div className="box flex justify-center gap-2 w-full rounded-lg p-3 mt-2">
             <div className="left w-full">
               <div className="name w-full">
                 <label htmlFor="">Name Event</label> <br />
@@ -50,7 +51,7 @@ const AddEvent = ({ open, handClose }: any) => {
                   type="text"
                   name="name"
                   id=""
-                  className="w-full h-8 outline-none border-2 border-black focus:border-black-500 rounded-md pl-1"
+                  className="w-full h-8 outline-none border border-black focus:border-gray-500 rounded-md pl-1"
                 />
               </div>
               {errors.name && (
@@ -77,7 +78,7 @@ const AddEvent = ({ open, handClose }: any) => {
               )}
             </div> */}
           </div>
-          <div className="h-[1px] bg-black w-full mt-4"></div>
+          <div className="h-[1px] bg-black w-full mt-1"></div>
         </div>
       </form>
     </Modal>
