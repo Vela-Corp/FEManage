@@ -6,7 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-const Sliderbar = ({ handlCloseModel }: any) => {
+const Sliderbar = ({ handlCloseModel, open, openDrawer }: any) => {
   const navigate = useNavigate();
   const menuSileBar = [
     {
@@ -49,9 +49,15 @@ const Sliderbar = ({ handlCloseModel }: any) => {
                 selectedValue === item?.path ? "bg-gray-200" : ""
               }`}
             >
-              <div className="flex items-center gap-4 ">
+              <div className="flex items-center text-center gap-4 ">
                 <div className="icon text-xl  text-teal-400">{item.icon}</div>
-                <div className="title font-normal ">{item.title}</div>
+                <div
+                  className={`title font-normal ${
+                    !open && !openDrawer ? "hidden" : ""
+                  } `}
+                >
+                  {item.title}
+                </div>
               </div>
             </li>
           ))}

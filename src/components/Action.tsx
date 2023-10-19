@@ -41,7 +41,10 @@ const Action = ({ valueSearch, setValueSearch, handSubmitSearch }: Props) => {
               />
             </button>
             <Drawer open={openModel} onClose={handlCloseModel}>
-              <Sliderbar handlCloseModel={handlCloseModel} />
+              <Sliderbar
+                handlCloseModel={handlCloseModel}
+                openDrawer={openModel}
+              />
             </Drawer>
           </div>
         </div>
