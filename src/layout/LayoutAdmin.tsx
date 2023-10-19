@@ -21,7 +21,7 @@ const LayoutAdmin = () => {
           <div
             className={`${
               !isOpen ? "ml-28" : "ml-64"
-            } box-right transform duration-700 float-right w-full bg-slate-100 pt-2 px-5 ml-64  min-h-screen`}
+            } box-right transform duration-700 float-right w-full bg-slate-100 pt-2 px-5   min-h-screen`}
           >
             <div className="container-header ">
               <button
