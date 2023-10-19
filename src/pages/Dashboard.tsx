@@ -1,8 +1,4 @@
-import {
-  faCircleCheck,
-  faPlus,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Action from "../components/Action";
 import { useContext, useState } from "react";
@@ -113,6 +109,8 @@ const Dashboard = () => {
         compare: (a, b) => a.name.localeCompare(b.name),
         multiple: 4,
       },
+      width: 150,
+      fixed: "left",
     },
 
     {
@@ -223,21 +221,23 @@ const Dashboard = () => {
           handSubmitSearch={handSubmitSearch}
         />
       </div>
-      <div className="table w-full bg-white rounded-2xl overflow-hidden my-5 shadow-xl">
+      <div className=" w-full bg-white rounded-2xl overflow-hidden my-5 shadow-xl">
         <div className="flex justify-between items-center p-5">
           <h1 className="font-semibold text-xl ">List Events</h1>
           <button
             onClick={handAdd}
-            className="btn btn-primary font-semibold text-white 0 rounded-md py-1 px-4 bg-teal-500 hover:bg-teal-600"
+            className="btn btn-primary font-semibold text-white 0 rounded-md py-2 px-4 bg-teal-500 hover:bg-teal-600"
           >
-            Add{" "}
-            <FontAwesomeIcon
-              className="text-white font-bold text-lg"
-              icon={faPlus}
-            />
+            Add Event
           </button>
         </div>
-        <Table columns={columns} dataSource={data?.docs} pagination={false} />
+        <Table
+          columns={columns}
+          dataSource={data?.docs}
+          pagination={false}
+          scroll={{ x: 1000 }}
+          rowKey="_id"
+        />
         {data?.total > 10 && (
           <div className="pagination text-center my-5 py-2 bg-white">
             <Paginations

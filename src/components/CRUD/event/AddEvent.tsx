@@ -34,7 +34,7 @@ const AddEvent = ({ open, handClose }: any) => {
       open={open}
       onOk={handleSubmit(onSubmit)}
       onCancel={handClose}
-      okButtonProps={{ style: { backgroundColor: "blue" } }}
+      okButtonProps={{ style: { backgroundColor: "#0ea985" } }}
       style={{ top: "30%" }}
     >
       <form>
@@ -78,7 +78,6 @@ const AddEvent = ({ open, handClose }: any) => {
               )}
             </div> */}
           </div>
-          <div className="h-[1px] bg-black w-full mt-1"></div>
         </div>
       </form>
     </Modal>

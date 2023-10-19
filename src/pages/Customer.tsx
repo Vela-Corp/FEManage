@@ -1,4 +1,4 @@
-import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddCustomer from "../components/CRUD/customer/AddCustomer";
 import { deleteCustomer, getAllCustomers } from "../api/customer";
@@ -35,7 +35,6 @@ const Customer = () => {
   const { data, refetch } = useQuery(["customers", page], () =>
     getAllCustomers({ page: page, keyword: valueSearch })
   );
-  console.log(data?.limit);
 
   const { mutate } = useMutation("deleteCustomer", deleteCustomer, {
     onSuccess: () => {
@@ -75,6 +74,8 @@ const Customer = () => {
         compare: (a, b) => a.name.localeCompare(b.name),
         multiple: 4,
       },
+      width: 150,
+      fixed: "left",
     },
     {
       title: "Phone",
@@ -129,6 +130,7 @@ const Customer = () => {
     {
       title: "Actions",
       dataIndex: "action",
+      width: 100,
       render: (_, record: any) => (
         <div className="flex items-center justify-center gap-4 ">
           <button
@@ -181,30 +183,28 @@ const Customer = () => {
           <Select.Option value="phone">Phone</Select.Option>
         </Select>
       </div> */}
-      <div className="table w-full bg-white rounded-2xl overflow-hidden my-5  shadow-xl">
-        <div className="flex justify-between items-center">
-          <h1 className="font-semibold text-xl p-5">List Customrs</h1>
+      <div className=" w-full bg-white rounded-2xl overflow-hidden my-5 shadow-xl">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center p-5 w-full gap-2 ">
+          <h1 className="font-semibold text-xl">List Customrs</h1>
           <div className="flex items-center gap-3">
             <button
               onClick={handOpenModalAdd}
-              className="btn btn-primary font-semibold text-white 0 rounded-md py-1 px-4 bg-teal-500 hover:bg-teal-600"
+              className="btn btn-primary font-medium text-white 0 rounded-md py-2 px-5 bg-teal-500 hover:bg-teal-600"
             >
-              Add{" "}
-              <FontAwesomeIcon
-                className="text-white font-bold text-lg"
-                icon={faPlus}
-              />
+              Add Customer
             </button>
 
             <AddCustomer open={modalAdd} handClose={handCloseModalAdd} />
           </div>
         </div>
-        <div className="">
+
+        <div className=" ">
           <Table
             columns={columns}
             dataSource={data?.docs}
             pagination={false}
-            scroll={{ x: 160 }}
+            scroll={{ x: 1000 }}
+            rowKey="_id"
           />
         </div>
         {data?.total > 5 && (

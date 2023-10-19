@@ -6,6 +6,8 @@ import { useContext } from "react";
 import { Modal } from "antd";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileExcel } from "@fortawesome/free-solid-svg-icons";
 const AddCustomer = ({ open, handClose }: any) => {
   const { user } = useContext(AuthContexts);
   const queryClient = useQueryClient();
@@ -93,7 +95,7 @@ const AddCustomer = ({ open, handClose }: any) => {
         open={open}
         onOk={handleSubmit(onSubmit)}
         onCancel={handClose}
-        okButtonProps={{ style: { backgroundColor: "blue" } }}
+        okButtonProps={{ style: { backgroundColor: "#0ea985" } }}
       >
         <form>
           <div className="title">
@@ -172,8 +174,20 @@ const AddCustomer = ({ open, handClose }: any) => {
           </div>
         </form>
       </Modal>
-      <form onSubmit={handleFileUpload}>
-        <input type="file" onChange={handleFileUpload} name="" id="" />
+      <form onSubmit={handleFileUpload} className="relative cursor-pointer">
+        <input
+          type="file"
+          onChange={handleFileUpload}
+          name=""
+          id=""
+          className="opacity-0 absolute top-0 left-0  z-20 cursor-pointer"
+        />
+        <div className="px-4 py-2 bg-green-500  text-white rounded cursor-pointer relative z-10">
+          <FontAwesomeIcon className="mr-2 text-lg" icon={faFileExcel} />
+          <label htmlFor="fileInput" className="cursor-pointer ">
+            Thêm file Excel
+          </label>
+        </div>
       </form>
     </>
   );

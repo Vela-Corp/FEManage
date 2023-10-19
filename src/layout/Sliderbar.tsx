@@ -6,7 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-const Sliderbar = () => {
+const Sliderbar = ({ handlCloseModel }: any) => {
   const navigate = useNavigate();
   const menuSileBar = [
     {
@@ -29,6 +29,7 @@ const Sliderbar = () => {
   const handleSelectChange = (value: string) => {
     setSelectedValue(value);
     navigate(value);
+    handlCloseModel();
   };
   return (
     <div className="siler__bar  ">

@@ -74,6 +74,8 @@ const Checkin = () => {
         compare: (a, b) => a.name.localeCompare(b.name),
         multiple: 4,
       },
+      width: 150,
+      fixed: "left",
       render: (text) => {
         const event = dataEvent?.docs.find((item: any) => item._id === text);
         return <span>{event?.name}</span>;
@@ -189,12 +191,18 @@ const Checkin = () => {
           <Select.Option value="phone">Phone</Select.Option>
         </Select>
       </div> */}
-      <div className="table w-full bg-white rounded-2xl overflow-hidden my-5 shadow-xl">
+      <div className=" w-full bg-white rounded-2xl overflow-hidden my-5 shadow-xl">
         <div className="flex justify-between items-center">
           <h1 className="font-semibold text-xl p-5">List Checkin</h1>
         </div>
         <div className="w-full overflow-x-auto">
-          <Table columns={columns} dataSource={data?.docs} pagination={false} />
+          <Table
+            columns={columns}
+            dataSource={data?.docs}
+            pagination={false}
+            scroll={{ x: 1000 }}
+            rowKey={"_id"}
+          />
         </div>
         {data?.total > 10 && (
           <div className="pagination text-center my-5 py-2 bg-white">
