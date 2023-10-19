@@ -33,6 +33,7 @@ const Dashboard = () => {
   const [modalDelete, setModalDelete] = useState(false);
   const [modalCheckin, setModalCheckin] = useState(false);
   const [phone, setPhone] = useState((null as string | null) || "");
+
   const { data, refetch } = useQuery("event", () =>
     getAllEvents({ keyword: valueSearch, page: page })
   );
@@ -49,6 +50,7 @@ const Dashboard = () => {
       return item._id;
     }
   });
+
   const { mutate: mutateCheckIn } = useMutation("createCheckin", createCheck, {
     onSuccess: (data) => {
       if (data) {
@@ -71,23 +73,19 @@ const Dashboard = () => {
       }
     },
   });
-  const handAdd = () => {
-    setOpenAdd(true);
-  };
-  const handClose = () => {
-    setOpenAdd(false);
-  };
+
   const handSubmitSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     refetch({ queryKey: valueSearch });
   };
-  const handlDeleteEvent = (id: string) => {
-    mutate(id);
-  };
 
-  const handlOnChange = (pages: number) => {
-    setPage(pages);
-  };
+  const handAdd = () => setOpenAdd(true);
+  const handClose = () => setOpenAdd(false);
+
+  const handlDeleteEvent = (id: string) => mutate(id);
+
+  const handlOnChange = (pages: number) => setPage(pages);
+
   const handlCheckPhone = (e: any) => {
     e.preventDefault();
 
@@ -196,6 +194,7 @@ const Dashboard = () => {
           </form>
         </Modal>
       </div>
+
       <Modal
         style={{ top: "30%" }}
         open={modalDelete}
@@ -211,6 +210,7 @@ const Dashboard = () => {
           <p className="text-base">Do you want to delete this event?</p>
         </div>
       </Modal>
+
       <div className="modelAdd">
         <AddEvent open={openAdd} handClose={handClose} />
       </div>

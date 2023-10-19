@@ -31,6 +31,7 @@ const Sliderbar = ({ handlCloseModel, open, openDrawer }: any) => {
     navigate(value);
     handlCloseModel();
   };
+
   return (
     <div className="siler__bar  ">
       <div className="siler__bar__logo ">

@@ -10,7 +10,7 @@ const AuthProiver = ({ children }: children) => {
   const token = Cookies.get("token");
   const [user, setUser] = useState(null);
   const { data } = useQuery(["userLogin", token], () => getOneUser(token), {
-    enabled: !!Cookies.get("token"),
+    enabled: !!token,
   });
   useEffect(() => {
     if (data) {

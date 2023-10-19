@@ -18,6 +18,7 @@ const LayoutAdmin = () => {
           >
             <Sliderbar open={isOpen} />
           </div>
+
           <div
             className={`${
               !isOpen ? "ml-28" : "ml-64"

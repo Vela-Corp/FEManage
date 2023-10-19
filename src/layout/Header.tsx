@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { Tooltip } from "antd";
 const Header = () => {
   const { user, setUser } = useContext(AuthContexts);
+
   const handleLogout = async () => {
     try {
       const res: any = await signoutApi();

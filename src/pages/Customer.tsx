@@ -29,9 +29,7 @@ const Customer = () => {
   const [idCustomer, setIdCustomer] = useState(null as string | null); // id Customer
   const [page, setPage] = useState(1);
   const [valueSearch, setValueSearch] = useState("");
-  // const [selectedValue, setSelectedValue] = useState(
-  //   (null as string | null) || localStorage.getItem("sort")
-  // );
+
   const { data, refetch } = useQuery(["customers", page], () =>
     getAllCustomers({ page: page, keyword: valueSearch })
   );
@@ -45,18 +43,12 @@ const Customer = () => {
     },
   });
 
-  const handlOnChange = (pages: number) => {
-    setPage(pages);
-  };
+  const handlOnChange = (pages: number) => setPage(pages);
+
   const handSubmitSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     refetch({ queryKey: valueSearch });
   };
-
-  // const handleSelectChange = (value: string) => {
-  //   setSelectedValue(value);
-  //   localStorage.setItem("sort", value);
-  // };
 
   const handlDeleteCustomer = (id: string) => {
     mutate(id);
@@ -172,17 +164,7 @@ const Customer = () => {
           />
         </div>
       </div>
-      {/* <div className="mt-5">
-        <Select
-          value={selectedValue}
-          onChange={handleSelectChange}
-          placeholder="Sort for"
-          className="min-w-[120px] min-h-[40px]"
-        >
-          <Select.Option value="name">Name</Select.Option>
-          <Select.Option value="phone">Phone</Select.Option>
-        </Select>
-      </div> */}
+
       <div className=" w-full bg-white rounded-2xl overflow-hidden my-5 shadow-xl">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center p-5 w-full gap-2 ">
           <h1 className="font-semibold text-xl">List Customrs</h1>

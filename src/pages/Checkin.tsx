@@ -36,10 +36,6 @@ const Checkin = () => {
     getAllChecks({ page: page, keyword: valueSearch })
   );
 
-  //   const [selectedValue, setSelectedValue] = useState(
-  //     (null as string | null) || localStorage.getItem("sortCheckin")
-  //   );
-
   const { mutate } = useMutation("deleteCheckin", deleteCheck, {
     onSuccess: () => {
       refetch();
@@ -55,11 +51,6 @@ const Checkin = () => {
     e.preventDefault();
     refetch({ queryKey: valueSearch });
   };
-
-  //   const handleSelectChange = (value: string) => {
-  //     setSelectedValue(value);
-  //     localStorage.setItem("sortCheckin", value);
-  //   };
 
   const handlDeleteCheckin = (id: string) => {
     mutate(id);
@@ -172,6 +163,7 @@ const Checkin = () => {
           <p className="text-base">Do you want to delete this event?</p>
         </div>
       </Modal>
+
       <div className="action mt-5 w-full flex justify-between">
         <div className="w-full">
           <Action
@@ -181,20 +173,12 @@ const Checkin = () => {
           />
         </div>
       </div>
-      {/* <div className="mt-5">
-        <Select
-          value={selectedValue}
-          onChange={handleSelectChange}
-          placeholder="Sort for"
-          className="min-w-[120px] min-h-[40px]"
-        >
-          <Select.Option value="phone">Phone</Select.Option>
-        </Select>
-      </div> */}
+
       <div className=" w-full bg-white rounded-2xl overflow-hidden my-5 shadow-xl">
         <div className="flex justify-between items-center">
           <h1 className="font-semibold text-xl p-5">List Checkin</h1>
         </div>
+
         <div className="w-full overflow-x-auto">
           <Table
             columns={columns}
@@ -204,6 +188,7 @@ const Checkin = () => {
             rowKey={"_id"}
           />
         </div>
+
         {data?.total > 10 && (
           <div className="pagination text-center my-5 py-2 bg-white">
             <Paginations
