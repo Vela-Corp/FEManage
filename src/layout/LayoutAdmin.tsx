@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { useState } from "react";
 
 const LayoutAdmin = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   return (
     <>
       <div className="container-layout w-full  mx-auto ">
